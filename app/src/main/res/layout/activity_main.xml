@@ -6,13 +6,97 @@
     android:layout_height="match_parent"
     tools:context="com.example.honoriovega.tictactoe.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/zero_zero"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/zero_one"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/zero_two"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/one_zero"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/one_one"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/one_two"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/two_zero"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/two_one"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <Button
+                android:textSize="60dp"
+                android:id="@+id/two_two"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/play_again"
+            android:text="Play Again"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+
+    </LinearLayout>
+
+
+
 
 </android.support.constraint.ConstraintLayout>
