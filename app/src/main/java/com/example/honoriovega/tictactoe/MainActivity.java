@@ -127,7 +127,16 @@ public class MainActivity extends AppCompatActivity {
                 {2,0,1,0,0,0}, {0,1,1,1,2,1}, {2,1,1,1,0,1}, {0,2,1,2,2,2}, {2,2,1,2,0,2},
                 {0,0,0,1,0,2},{0,1,0,2,0,0},{1,0,1,1,1,2},{1,2,1,1,1,0}, {2,0,2,1,2,2},
                 {2,2,2,1,2,0},{0,0,1,1,2,2},{1,1,2,2,0,0},{2,0,1,1,0,2},{0,2,1,1,2,0},
-                {0,0,2,2,1,1},{2,0,0,2,1,1},{1,0,1,2,1,1},{0,0,0,2,0,1},{2,0,2,2,2,1}};
+                {0,0,2,2,1,1},{2,0,0,2,1,1},{1,0,1,2,1,1},{0,0,0,2,0,1},{2,0,2,2,2,1},
+                {2,2,0,2,1,2}};
+
+
+        if(mGridButton[1][1].isEnabled()) {
+            mGrid[1][1] = mComputerSymbol.charAt(0);
+            mGridButton[1][1].setText(mComputerSymbol);
+            mGridButton[1][1].setEnabled(false);
+            return;
+        }
 
 
         for(int i = 0; i < wins.length;i++){
@@ -164,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         int four = possibleMoves[3];
         int five = possibleMoves[4];
         int six = possibleMoves[5];
+
 
         if(mGrid[one][two] == symbol && mGrid[three][four] == symbol
                 && mGridButton[five][six].isEnabled() ) {
