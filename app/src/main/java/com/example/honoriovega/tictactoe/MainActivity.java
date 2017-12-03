@@ -14,27 +14,33 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Model grid and UI grid
     private Button[][] mGridButton = new Button[3][3];
     private char[][] mGrid = new char[3][3];
 
     private Button mPlayAgainButton;
 
+    // Users
     private String mPlayerSymbol = "X";
     private String mComputerSymbol = "0";
 
     private boolean mIsUserFirst = true;
 
-
     public static final int mIDS[] = {R.id.zero_zero, R.id.zero_one, R.id.zero_two,
                                       R.id.one_zero, R.id.one_one, R.id.one_two,
                                       R.id.two_zero, R.id.two_one, R.id.two_two};
 
+
+
+    // Runs once when the activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mPlayAgainButton = (Button) findViewById(R.id.play_again);
+
+        // Start the activity again when the user clicks play again
         mPlayAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,20 +49,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Disable the play again button for now, gets enabled when their is a winner
+        // or a tie
         mPlayAgainButton.setEnabled(false);
 
-        Toast.makeText(getApplicationContext(),"Hello your Symbol is " + mPlayerSymbol,Toast.LENGTH_SHORT)
-                .show();
-
-
         Random r = new Random();
-
-        if (r.nextInt(100) % 2 == 0) {
-            mIsUserFirst = false;
-        }
-
-
-
+        // Pick the user or computer to go first
+        mIsUserFirst = r.nextInt(100) % 2 == 0;
 
         int count = 0;
         char n = '1';
@@ -64,23 +63,15 @@ public class MainActivity extends AppCompatActivity {
             for(int j = 0; j < 3; j++){
                 mGrid[i][j] = n++;
                 mGridButton[i][j] = (Button) findViewById(mIDS[count]);
-                final String index = "" + i + j;
                 final int finalJ = j;
                 final int finalI = i;
                 mGridButton[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        mGrid[finalI][finalJ] = mPlayerSymbol.charAt(0);
-                        mGridButton[finalI][finalJ].setText(mPlayerSymbol);
-                        mGridButton[finalI][finalJ].setEnabled(false);
-                        if(isTie()) {
-                            Toast.makeText(getApplicationContext(),"It's a tie!",Toast.LENGTH_SHORT)
-                                    .show();
+                        updateModelAndUI(mPlayerSymbol,finalI,finalJ);
 
-                            mPlayAgainButton.setEnabled(true);
-                        }
-
+                        // Check to see if user wins after making move
                         if(checkForWinner()) {
                             Toast.makeText(getApplicationContext(),"User Wins!",Toast.LENGTH_SHORT)
                                     .show();
@@ -88,18 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
                         } else {
 
-                            // Actions to do after 10 seconds
                             computerTurn();
+                            // Check if computer won
                             if(checkForWinner()) {
                                 Toast.makeText(getApplicationContext(),"Computer Wins!",Toast.LENGTH_SHORT)
                                         .show();
                                 disableAllButtons();
                             }
                         }
-
-
-
-
 
                     }
 
@@ -111,10 +98,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        // if the user doesn't go first then computer goes first
         if(!mIsUserFirst) {
-            mGridButton[1][1].setText(mComputerSymbol);
-            mGridButton[1][1].setEnabled(false);
-            mGrid[1][1] = mComputerSymbol.charAt(0);
+            // make move in the middle
+            updateModelAndUI(mComputerSymbol, 1, 1);
+
         }
 
 
@@ -123,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     private void computerTurn() {
 
 
+        // winning combinations
         int wins[][] = new int[][] {{0,0,1,0,2,0},
                 {2,0,1,0,0,0}, {0,1,1,1,2,1}, {2,1,1,1,0,1}, {0,2,1,2,2,2}, {2,2,1,2,0,2},
                 {0,0,0,1,0,2},{0,1,0,2,0,0},{1,0,1,1,1,2},{1,2,1,1,1,0}, {2,0,2,1,2,2},
@@ -131,42 +120,40 @@ public class MainActivity extends AppCompatActivity {
                 {2,2,0,2,1,2}};
 
 
+        // If middle spot is not taken, make move here
         if(mGridButton[1][1].isEnabled()) {
-            mGrid[1][1] = mComputerSymbol.charAt(0);
-            mGridButton[1][1].setText(mComputerSymbol);
-            mGridButton[1][1].setEnabled(false);
+            updateModelAndUI(mComputerSymbol, 1, 1);
             return;
         }
 
 
+        // If their is a move were computer can win, take it
         for(int i = 0; i < wins.length;i++){
             if (pickBestMove(mComputerSymbol.charAt(0), wins[i])) {
                 return;
             }
         }
+
+        // try to block the user from winning
         for(int i = 0; i < wins.length;i++){
             if (pickBestMove(mPlayerSymbol.charAt(0), wins[i])) {
                 return;
             }
         }
 
+        // simulates random move - take the first empty spot
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3;j ++) {
                 if(mGridButton[i][j].isEnabled()) {
-                    mGrid[i][j] = mComputerSymbol.charAt(0);
-
-                    mGridButton[i][j].setText(mComputerSymbol);
-                    mGridButton[i][j].setEnabled(false);
+                    updateModelAndUI(mComputerSymbol, i, j);
                     return;
                 }
             }
         }
-
-
-
     }
 
     private boolean pickBestMove(char symbol, int[] possibleMoves) {
+
         int one = possibleMoves[0];
         int two = possibleMoves[1];
         int three = possibleMoves[2];
@@ -174,13 +161,11 @@ public class MainActivity extends AppCompatActivity {
         int five = possibleMoves[4];
         int six = possibleMoves[5];
 
-
         if(mGrid[one][two] == symbol && mGrid[three][four] == symbol
                 && mGridButton[five][six].isEnabled() ) {
 
-            mGrid[five][six] = mComputerSymbol.charAt(0);
-            mGridButton[five][six].setText(mComputerSymbol);
-            mGridButton[five][six].setEnabled(false);
+            updateModelAndUI(mComputerSymbol, five, six);
+
             return true;
         }
 
@@ -247,6 +232,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mPlayAgainButton.setEnabled(true);
+    }
+
+    // Function to update model and UI,
+    private void updateModelAndUI(String symbol, int i, int j) {
+        mGrid[i][j] = symbol.charAt(0);
+        mGridButton[i][j].setText(symbol);
+        mGridButton[i][j].setEnabled(false);
     }
 
     private boolean isTie() {
