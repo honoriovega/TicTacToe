@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
         mPlayAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(MainActivity.this, MainActivity.class);
+//                startActivity(i);
+
+                 restartGame();
             }
         });
 
@@ -61,8 +63,11 @@ public class MainActivity extends AppCompatActivity {
         char n = '1';
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++){
+
                 mGrid[i][j] = n++;
                 mGridButton[i][j] = (Button) findViewById(mIDS[count]);
+                mGridButton[i][j].setTextColor(Color.parseColor("#808080"));
+
                 final int finalJ = j;
                 final int finalI = i;
                 mGridButton[i][j].setOnClickListener(new View.OnClickListener() {
@@ -75,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         if(checkForWinner()) {
                             Toast.makeText(getApplicationContext(),"User Wins!",Toast.LENGTH_SHORT)
                                     .show();
-                            disableAllButtons();
+                            toggleButtons(false);
 
                         } else {
 
@@ -84,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             if(checkForWinner()) {
                                 Toast.makeText(getApplicationContext(),"Computer Wins!",Toast.LENGTH_SHORT)
                                         .show();
-                                disableAllButtons();
+                                toggleButtons(false);
                             }
                         }
 
@@ -108,6 +113,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void restartGame() {
+        toggleButtons(true);
+        char letter = 'a';
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                mGridButton[i][j].setText("");
+                mGridButton[i][j].setTextColor(Color.parseColor("#808080"));
+
+                mGrid[i][j] = letter;
+                letter += 1;
+
+            }
+        }
+        mPlayAgainButton.setEnabled(false);
+    }
+
     private void computerTurn() {
 
 
@@ -117,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 {0,0,0,1,0,2},{0,1,0,2,0,0},{1,0,1,1,1,2},{1,2,1,1,1,0}, {2,0,2,1,2,2},
                 {2,2,2,1,2,0},{0,0,1,1,2,2},{1,1,2,2,0,0},{2,0,1,1,0,2},{0,2,1,1,2,0},
                 {0,0,2,2,1,1},{2,0,0,2,1,1},{1,0,1,2,1,1},{0,0,0,2,0,1},{2,0,2,2,2,1},
-                {2,2,0,2,1,2}};
+                {2,2,0,2,1,2},{0,2,2,2,1,2},{0,0,2,0,1,0}};
 
 
         // If middle spot is not taken, make move here
@@ -224,10 +246,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void disableAllButtons() {
+    private void toggleButtons(boolean state) {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                mGridButton[i][j].setEnabled(false);
+                mGridButton[i][j].setEnabled(state);
             }
         }
 

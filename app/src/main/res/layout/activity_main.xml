@@ -18,10 +18,10 @@
             android:orientation="horizontal">
 
             <Button
-                android:textSize="60dp"
                 android:id="@+id/zero_zero"
                 android:layout_width="120dp"
-                android:layout_height="120dp" />
+                android:layout_height="120dp"
+                android:textSize="60dp" />
 
             <Button
                 android:textSize="60dp"
